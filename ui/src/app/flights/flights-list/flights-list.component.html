@@ -1,0 +1,65 @@
+<h2>New Flight Form</h2>
+<!--If we user reactive form will help lot in testing and handling validation but solve the problem as per org standard -->
+<form [formGroup]="form" (ngSubmit)="createFligth(form)">
+
+    <label for="code">Code</label>
+    <input name="code" placeholder="Code *" formControlName="code" />
+    <small *ngIf="form.controls['code'].invalid">Require</small>
+
+    <label for="Depature">Depature</label>
+    <select name="Depature" formControlName="depature" (change)="depatureSelected($event.target.value)">
+        <option *ngFor="let location of depaturelocations" [(value)]="location">{{location}}</option>
+    </select>
+    <small *ngIf="form.controls['depature'].invalid">Please select Depature location</small>
+
+    <label for="Arrival">Arrival</label>
+    <select name="Arrival" formControlName="arrival">
+        <option *ngFor="let location of arrivallocations" [(value)]="location">{{location}}</option>
+    </select>
+    <small *ngIf="form.controls['arrival'].invalid">Please select Arrival location</small>
+
+
+    <label for="TotalSeats">TotalSeats</label>
+    <input type="number" name="TotalSeats" placeholder="TotalSeats *" formControlName="totalSeats" />
+    <small *ngIf="form.controls['totalSeats'].invalid">Require</small>
+
+    <label for="Price">Price</label>
+    <input type="number" name="Price" placeholder="Price *" formControlName="price" />
+    <small *ngIf="form.controls['price'].invalid">Required</small>
+
+    <button type="submit" [disabled]="form.invalid">Add New Flight</button>
+
+</form>
+<h2>Flight list</h2>
+
+<table spacing="0">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Depature</th>
+            <th>Arrival</th>
+            <th>TotalSeats</th>
+            <th>Price</th>
+            <th colspan="3">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let flight of flights">
+            <td>{{flight.code}}</td>
+            <td>{{flight.depature}}</td>
+            <td>{{flight.arrival}}</td>
+            <td>{{flight.totalSeats}}</td>
+            <td>{{flight.price}}</td>
+            <td>
+                <a [routerLink]="['/flights/deatils/', flight.id]">Open</a>
+            </td>
+            <td>
+                <a [routerLink]="['/flights/scheduler/' + flight.id]">AddSchedule</a>
+            </td>
+            <td>
+                <a [routerLink]="['/flights/seat/' + flight.id]">AddSeat</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a [routerLink]="['']">Home</a>

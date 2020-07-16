@@ -1,0 +1,44 @@
+<h2>New Flight Schedule Form</h2>
+<!--If we user reactive form will help lot in testing and handling validation but solve the problem as per org standard -->
+<form [formGroup]="form" (ngSubmit)="createScheduler()">
+
+    <label for="departureTime">Departure Time</label>
+    <select name="departureTime" formControlName="departureTime">
+        <option *ngFor="let time of times" [(value)]="time">{{time}}</option>
+    </select>
+    <small *ngIf="form.controls['departureTime'].invalid">Please select Departure Time</small>
+
+    <label for="arrivalTime">Arrival Time</label>
+    <select name="arrivalTime" formControlName="arrivalTime">
+        <option *ngFor="let time of times" [(value)]="time">{{time}}</option>
+    </select>
+    <small *ngIf="form.controls['arrivalTime'].invalid">Please select Arrival Time</small>
+
+    <!-- this can be done autometically input by calculate diffrence between Departure and Arrival but out of scope work -->
+    <label for="JourneyTime">Total Journey Time</label>
+    <input name="journeyTime" placeholder="journeyTime *" formControlName="journeyTime" />
+    <small *ngIf="form.controls['journeyTime'].invalid">Required</small>
+
+    <button type="submit" [disabled]="form.invalid">Add Flight Schedule</button>
+
+</form>
+<h2>Flight list</h2>
+
+<table spacing="0">
+    <thead>
+        <tr>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Total Journey Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let schedule of flightSchedulers">
+            <td>{{schedule.departureTime}}</td>
+            <td>{{schedule.arrivalTime}}</td>
+            <td>{{schedule.journeyTime}}</td>
+        </tr>
+    </tbody>
+</table>
+<a [routerLink]="['']">Home</a>
+<a [routerLink]="['/flights']">Back</a>
