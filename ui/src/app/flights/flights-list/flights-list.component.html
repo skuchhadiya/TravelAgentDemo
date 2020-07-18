@@ -1,5 +1,6 @@
 <h2>New Flight Form</h2>
-<!--If we user reactive form will help lot in testing and handling validation but solve the problem as per org standard -->
+
+<!-- Use rective forms -->
 <form [formGroup]="form" (ngSubmit)="createFligth(form)">
 
     <label for="code">Code</label>
@@ -25,10 +26,6 @@
     </select>
     <small *ngIf="form.controls['totalSeats'].invalid">Please select Total Seats</small>
 
-
-    <!-- <label for="TotalSeats">TotalSeats</label>
-    <input type="number" name="TotalSeats" placeholder="TotalSeats *" formControlName="totalSeats" />
-    <small *ngIf="form.controls['totalSeats'].invalid">Require</small> -->
 
     <label for="Price">Price</label>
     <input type="number" name="Price" placeholder="Price *" formControlName="price" />
@@ -58,13 +55,7 @@
             <td>{{flight.totalSeats}}</td>
             <td>{{flight.price}}</td>
             <td>
-                <a [routerLink]="['/flights/deatils/', flight.id]">Open</a>
-            </td>
-            <td>
                 <a [routerLink]="['/flights/scheduler/' + flight.id]">AddSchedule</a>
-            </td>
-            <td>
-                <a [routerLink]="['/flights/seat/' + flight.id]">AddSeat</a>
             </td>
         </tr>
     </tbody>

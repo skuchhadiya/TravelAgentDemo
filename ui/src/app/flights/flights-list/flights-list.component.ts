@@ -21,6 +21,7 @@ export class FlightsListComponent implements OnInit {
   flights: IFlight[] = [];
 
   constructor(private _flightService: FlightsService) { }
+
   ngOnInit() {
 
     this._flightService.GetFlights().subscribe(flights => {

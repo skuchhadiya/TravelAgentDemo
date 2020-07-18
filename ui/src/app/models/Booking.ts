@@ -1,5 +1,4 @@
 import { ClientTypesEnum } from '../enums/ClientTypesEnum';
-import { IFlight, IFlightScheduler, Seat } from './Flight';
 import { FlightTypeEnum } from '../enums/FlightTypeEnum';
 
 export interface IClient {
@@ -22,6 +21,28 @@ export interface IBookingDTO {
     inBoudFlightInfo?: IFlightBookingInfoDTO;
 }
 
+export interface FlightBookingDetailsDTO {
+    bookingRef: string;
+    name: string;
+    booked: Date,
+    outBoundFlight: FlightDetailsDTO;
+    inBoundFlight: FlightDetailsDTO;
+    TotalAmount: number;
+}
+
+export interface FlightDetailsDTO {
+    bookingDate: Date;
+    code: string;
+    depature: string;
+    depaturetime: string;
+    arrival: string;
+    arrivalTime: string;
+    journeyTime: string;
+    seat: string;
+    price: number
+
+}
+
 export interface IFlightSearchTerms {
     type: ClientTypesEnum;
     arrival: string;
@@ -40,37 +61,4 @@ export interface IFlightBookingInfoDTO {
     journeyTime: string
     price: string
     seatId: string
-}
-
-export interface FlightBooking {
-
-    id: string;
-    bookingRef: string;
-    bookedDate: Date;
-
-    clientID: string;
-    client?: IClient;
-
-    outBookingDate: Date;
-
-    outFlightId: string;
-    outFlight?: IFlight
-
-    outFlightSchedulerId: string;
-    outFlightScheduler?: IFlightScheduler
-
-    outSeatId: string;
-    outSeat?: Seat;
-
-    inBookingDate?: string;
-
-    inFlightId?: string;
-    inFlight?: IFlight
-
-    inFlightSchedulerId?: string;
-    inFlightScheduler?: IFlightScheduler
-
-    inSeatId?: string;
-    inSeat?: Seat;
-
 }

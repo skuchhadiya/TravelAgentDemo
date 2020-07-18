@@ -1,3 +1,4 @@
+//this can be retrive from database or datetime Picker
 export const times: string[] = [
     '01:00 AM',
     '02:00 AM',

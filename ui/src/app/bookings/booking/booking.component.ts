@@ -4,15 +4,18 @@ import { BookingsService } from 'src/app/services/bookings.service';
 import { ClientTypesEnum } from 'src/app/enums/ClientTypesEnum';
 import { deepClone } from 'src/app/Utility/deep-Clone';
 import { locations } from 'src/app/constants/locations';
-import { IFlightSearchTerms, IFlightBookingInfoDTO, ISeatDTO, IBookingDTO } from 'src/app/models/Booking';
+import { IFlightSearchTerms, IFlightBookingInfoDTO, ISeatDTO, IBookingDTO, FlightBookingDetailsDTO } from 'src/app/models/Booking';
 import { FlightTypeEnum } from 'src/app/enums/FlightTypeEnum';
 
 @Component({
-  selector: 'app-booking-list',
-  templateUrl: './booking-list.component.html',
-  styleUrls: ['./booking-list.component.scss']
+
+  selector: 'app-booking',
+  templateUrl: './booking.component.html',
+  styleUrls: ['./booking.component.scss']
+
 })
-export class BookingListComponent implements OnInit {
+
+export class BookingComponent implements OnInit {
 
   clientTypeEnum = ClientTypesEnum;
   searchform: FormGroup;
@@ -25,6 +28,8 @@ export class BookingListComponent implements OnInit {
   outBoundFlightseatsOptions: ISeatDTO[] = [];
   inBoundFlightseatsOptions: ISeatDTO[] = [];
 
+
+  bookingDeatils: FlightBookingDetailsDTO;
   constructor(private _bookinService: BookingsService) { }
 
   ngOnInit() {
@@ -51,7 +56,6 @@ export class BookingListComponent implements OnInit {
 
     if (this.searchform.valid) {
 
-
       const search = this._build_IFlightSearchTerms_Instance(this.searchform);
       if (search.type === ClientTypesEnum.Return) {
         this.bookingform.controls['inBoudFlightInfo'].setValidators([Validators.required]);
@@ -60,10 +64,9 @@ export class BookingListComponent implements OnInit {
 
       this._bookinService.GetFlightBookingInfo(search)
         .subscribe(data => {
-          console.log(data);
+
           this.outBoudsFlight = data.filter(x => x.flightType === FlightTypeEnum.OutBound);
           this.inBoudsFlight = data.filter(x => x.flightType === FlightTypeEnum.InBound);
-
 
         })
     }
@@ -80,6 +83,7 @@ export class BookingListComponent implements OnInit {
   }
 
   onSelectFlight(flight: IFlightBookingInfoDTO) {
+
     const amount = parseFloat(this.bookingform.get('totalAmount').value ? this.bookingform.get('totalAmount').value : '0');
     const newValue = amount + flight.price;
     this.bookingform.get('totalAmount').setValue(newValue);
@@ -95,39 +99,17 @@ export class BookingListComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.bookingform);
+
     if (this.bookingform.valid) {
-      console.log('dfndsafndn')
       const value = this._build_IBookingDTO_Instance(this.bookingform);
       this._bookinService.CreateBooking(value)
         .subscribe(data => {
           console.log(data);
+          this.bookingDeatils = data;
         })
     }
+
   }
-
-  private _build_IBookingDTO_Instance(form: FormGroup): IBookingDTO {
-
-    const outFlightInfo: IFlightBookingInfoDTO = form.controls['outBoudFlightInfo'].value;
-    const outFlightSeat: string = form.controls['outBoudFlightSeat'].value;
-    outFlightInfo.seatId = outFlightSeat;
-
-    const inFlightInfo: IFlightBookingInfoDTO = form.controls['inBoudFlightInfo'].value;
-    let inFlightSeat: string;
-    if (inFlightInfo) {
-      inFlightSeat = form.controls['inBoudFlightSeat'].value;
-      inFlightInfo.seatId = inFlightSeat
-    }
-
-
-    return {
-      name: form.controls['name'].value,
-      outBoudFlightInfo: outFlightInfo,
-      totalAmount: parseFloat(form.controls['totalAmount'].value),
-      inBoudFlightInfo: inFlightInfo,
-    }
-  }
-
 
 
   private _build_IFlightSearchTerms_Instance(form: FormGroup): IFlightSearchTerms {
@@ -138,6 +120,28 @@ export class BookingListComponent implements OnInit {
       arrival: form.controls['arrival'].value
     }
 
+  }
+
+  private _build_IBookingDTO_Instance(form: FormGroup): IBookingDTO {
+
+    const outFlightInfo: IFlightBookingInfoDTO = form.controls['outBoudFlightInfo'].value;
+    const outFlightSeat: string = form.controls['outBoudFlightSeat'].value;
+    outFlightInfo.seatId = outFlightSeat;
+
+    const inFlightInfo: IFlightBookingInfoDTO = form.controls['inBoudFlightInfo'].value;
+
+    let inFlightSeat: string;
+    if (inFlightInfo) {
+      inFlightSeat = form.controls['inBoudFlightSeat'].value;
+      inFlightInfo.seatId = inFlightSeat
+    }
+
+    return {
+      name: form.controls['name'].value,
+      outBoudFlightInfo: outFlightInfo,
+      totalAmount: parseFloat(form.controls['totalAmount'].value),
+      inBoudFlightInfo: inFlightInfo,
+    }
   }
 
 }

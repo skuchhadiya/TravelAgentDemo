@@ -1,7 +1,6 @@
 import { Component, Input, forwardRef, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { IFlightBookingInfoDTO } from 'src/app/models/Booking';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormControl, Validators } from '@angular/forms';
-import { FlightTypeEnum } from 'src/app/enums/FlightTypeEnum';
 import { deepClone } from 'src/app/Utility/deep-Clone';
 
 @Component({
@@ -24,6 +23,7 @@ export class FlightInfoComponent implements OnInit, OnChanges, ControlValueAcces
   options: IFlightBookingInfoDTO[];
   private _onChange: (option) => void;
   form: FormGroup;
+
   ngOnInit(): void {
 
     this.form = new FormGroup({
@@ -33,6 +33,7 @@ export class FlightInfoComponent implements OnInit, OnChanges, ControlValueAcces
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     if (changes['flightOptions'].currentValue) {
       this.options = deepClone(this.flightOptions);
       if (changes['flightOptions'].firstChange == false)
@@ -51,6 +52,7 @@ export class FlightInfoComponent implements OnInit, OnChanges, ControlValueAcces
   }
   setDisabledState?(isDisabled: boolean): void {
   }
+
   onSelect(option: IFlightBookingInfoDTO) {
 
     this.options = [option];

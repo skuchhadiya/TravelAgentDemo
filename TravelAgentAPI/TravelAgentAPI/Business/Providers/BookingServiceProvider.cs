@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using TravelAgentAPI.DataModels;
 using TravelAgentAPI.DTOS;
@@ -23,7 +22,7 @@ namespace TravelAgentAPI.Business.Providers
 
         }
 
-        public async Task<string> CreateBookingAsync(BookingDTO booking)
+        public async Task<FlightBookingDetailsDTO> CreateBookingAsync(BookingDTO booking)
         {
             var newbooking = new Booking
             {
@@ -39,7 +38,7 @@ namespace TravelAgentAPI.Business.Providers
             var result = this._context.Bookings.Add(newbooking);
             await _context.SaveChangesAsync();
 
-            return result.Entity.BookingRef;
+            return _flightBookingManager.GetFlightBookingDetails(result.Entity);
 
         } 
 
@@ -66,5 +65,6 @@ namespace TravelAgentAPI.Business.Providers
             }).ToList();
             return result;
         }
+
     }
 }

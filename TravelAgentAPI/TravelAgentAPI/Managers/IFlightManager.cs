@@ -9,7 +9,8 @@ namespace TravelAgentAPI.Managers
 {
     public interface IFlightManager
     {
-       Task<FlightBooking> CreateAsync(BookingDTO booking, ApplicationDbContext context);
-       Task<List<FlightBookingSearchInfoDTO>> GetFlightBookingInfoAsync(FlightSearchTermsDTO terms, ApplicationDbContext context);
+       Task<FlightBooking> CreateAsync(BookingDTO booking);
+       Task<List<FlightBookingSearchInfoDTO>> GetFlightBookingInfoAsync(FlightSearchTermsDTO terms);
+        FlightDetailsDTO GetFlightDetails(Booking booking);
     }
 }

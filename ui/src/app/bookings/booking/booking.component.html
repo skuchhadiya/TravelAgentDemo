@@ -61,7 +61,14 @@
             <small *ngIf="bookingform.controls['inBoudFlightSeat'].invalid">Please select arrival seat </small>
         </div>
     </div>
-    <label *ngIf="bookingform.controls['totalAmount'].value">TotalAmout :
-        {{bookingform.controls['totalAmount'].value}}</label>
-    <button type="submit">Submit</button>
+    <label *ngIf="bookingform.controls['totalAmount'].value">TotalAmout
+        :{{bookingform.controls['totalAmount'].value}}</label>
+    <div class="submit-button">
+        <button type="submit">Submit</button>
+    </div>
+
 </form>
+<div class="success" *ngIf="bookingDeatils">
+    <p>Thanks {{bookingDeatils.name}} for booking with travel Agent, Your booking has been confirmend</p>
+    <p>Booking Ref : {{bookingDeatils.bookingRef}}</p>
+</div>

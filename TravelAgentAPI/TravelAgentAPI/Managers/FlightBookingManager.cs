@@ -12,32 +12,46 @@ namespace TravelAgentAPI.Managers
     {
         private readonly IFlightManager _outBoundManager;
         private readonly IFlightManager _inBoundManager;
-        private  ApplicationDbContext _context;
+        private ApplicationDbContext _context;
         public FlightBookingManager(ApplicationDbContext context)
         {
             _context = context;
-            _outBoundManager = new OutBoundFlightManager();
-            _inBoundManager = new InBoudFlightManager();
+            _outBoundManager = new OutBoundFlightManager(_context);
+            _inBoundManager = new InBoundFlightManager(_context);
         }
         public async Task<List<FlightBooking>> CreateAsync(BookingDTO booking)
         {
             var list = new List<FlightBooking>();
-            list.Add(await _outBoundManager.CreateAsync(booking, _context));
+            list.Add(await _outBoundManager.CreateAsync(booking));
             if (booking.InBoudFlightInfo != null)
             {
-                list.Add(await _inBoundManager.CreateAsync(booking, this._context));
+                list.Add(await _inBoundManager.CreateAsync(booking));
             }
             return list;
         }
         public async Task<List<FlightBookingSearchInfoDTO>> GetFlightBookingInfoAsync(FlightSearchTermsDTO terms)
         {
             List<FlightBookingSearchInfoDTO> list = new List<FlightBookingSearchInfoDTO>();
-            list.AddRange(await _outBoundManager.GetFlightBookingInfoAsync(terms, _context));
-            if(terms.Type == ClientTypes.Return)
+            list.AddRange(await _outBoundManager.GetFlightBookingInfoAsync(terms));
+            if (terms.Type == ClientTypes.Return)
             {
-                list.AddRange(await _inBoundManager.GetFlightBookingInfoAsync(terms, _context));
+                list.AddRange(await _inBoundManager.GetFlightBookingInfoAsync(terms));
             }
             return list;
         }
-    }
+
+        public FlightBookingDetailsDTO GetFlightBookingDetails(Booking booking) {
+
+            return new FlightBookingDetailsDTO
+            {
+                BookingRef = booking.BookingRef,
+                Name = booking.Client.Name,
+                Booked = booking.BookedDate,
+                OutBoundFlight = _outBoundManager.GetFlightDetails(booking),
+                InBoundFlight = _inBoundManager.GetFlightDetails(booking),
+                TotalAmount =booking.TotalAmount
+            };
+        }
+
+     }
 }

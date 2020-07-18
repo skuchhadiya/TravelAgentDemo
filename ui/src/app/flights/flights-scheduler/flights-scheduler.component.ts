@@ -25,6 +25,7 @@ export class FlightsSchedulerComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this._flightSchedulerService.GetFlightSchedulers(this.flightId)
       .subscribe(flightSchedulers => {
         console.log(flightSchedulers);
@@ -38,15 +39,16 @@ export class FlightsSchedulerComponent implements OnInit {
       arrivalTime: new FormControl(null, [Validators.required]),
       journeyTime: new FormControl(null, [Validators.required]),
     });
+
   }
 
   createScheduler() {
-    console.log(this.form);
+
     if (this.form.valid) {
       const newflightScheduler = this._bulid_IFlightScheduler_Instance(this.form);
       this._flightSchedulerService.CreateFlightScheduler(newflightScheduler)
         .subscribe(flightScheduler => {
-          console.log(flightScheduler);
+
           this.flightSchedulers.push(flightScheduler);
         })
     }
@@ -54,6 +56,7 @@ export class FlightsSchedulerComponent implements OnInit {
   }
 
   private _bulid_IFlightScheduler_Instance(form: FormGroup): IFlightScheduler {
+
     return {
       id: form.controls['id'].value,
       flightId: form.controls['flightId'].value,
@@ -61,6 +64,7 @@ export class FlightsSchedulerComponent implements OnInit {
       arrivalTime: form.controls['arrivalTime'].value,
       journeyTime: form.controls['journeyTime'].value,
     };
+
   }
 
 }

@@ -48,6 +48,17 @@ namespace TravelAgentAPI.Migrations
                     table.PrimaryKey("PK_Flights", x => x.Id);
                 });
 
+            migrationBuilder.InsertData(
+              table: "Flights",
+              columns: new[] {"Id", "Code", "Arrival", "Depature", "TotalSeats", "Price" },
+              values: new object[] { Guid.NewGuid(), "BA452", "London(Any)", "Manchester(MAN)", 152, 350 });
+
+            migrationBuilder.InsertData(
+             table: "Flights",
+             columns: new[] { "Id", "Code", "Arrival", "Depature", "TotalSeats", "Price" },
+             values: new object[] { Guid.NewGuid(), "BA451", "Manchester(MAN)", "London(Any)", 152, 350 });
+
+
             migrationBuilder.CreateTable(
                 name: "Bookings",
                 columns: table => new

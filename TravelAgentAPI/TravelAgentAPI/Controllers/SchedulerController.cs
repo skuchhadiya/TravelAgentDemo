@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TravelAgentAPI.Business.Providers;
 using TravelAgentAPI.DataModels;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TravelAgentAPI.Controllers
 {
@@ -20,13 +17,14 @@ namespace TravelAgentAPI.Controllers
             _service = service;
         }
 
+        // GET: Scheduler/{flightId}
         [HttpGet("{flightId}")]
         public async Task<IActionResult> Get(Guid flightId)
         {
             return Ok(await _service.GetFlightSchedulersAsync(flightId));
         }
 
-
+        // Post: Scheduler Body { expecting to pass FlightScheduler instance in body }
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] FlightScheduler flightScheduler)
         {

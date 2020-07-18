@@ -1,3 +1,5 @@
+// consuming of standard style handling technique
+
 @import "src/app/styles/ui-styles.scss";
 :host {
      @include clearStyles();
@@ -31,7 +33,14 @@
              }
              .flight-selection-container{
                 @include flexCenter(row);
-             }
-        }
+            }
+            .submit-button {
+                padding-top: 15px;
+            } 
+    }
+    .success{
+        color: green;
+
+    }
     
 }
