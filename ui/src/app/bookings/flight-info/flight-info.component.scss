@@ -1,0 +1,44 @@
+@import "src/app/styles/ui-styles.scss";
+:host {
+     @include clearStyles();
+     margin: 10px 10px 10px 10px;
+    @include flexCenter(column);
+    .flight-info-container{
+        .flight-info{
+            margin: 20px;
+            height: 100px;
+            background-color:grey;
+            border-radius: 5px;
+            padding: 10px;
+             @include flexCenter(row);
+            .flight-code{
+                @include flexCenter(column);
+            }
+            .flight-details{
+                margin-left: 50px;
+                margin-right: 50px;
+                 @include flexCenter(row);
+                 .flight-details-depature{
+                      margin-left: 50px;
+                      margin-right: 50px;
+                     @include flexCenter(column);
+                 }
+                 .flight-details-arrival{
+                      @include flexCenter(column);
+                 }
+                
+            }
+            .flight-action{
+                    @include flexCenter(column);
+            }
+            &.Red{
+                     background-color: #ddd;
+            }
+            .selction-button{
+                @include flexCenter(column);
+            }
+        }
+    }
+    
+   
+}

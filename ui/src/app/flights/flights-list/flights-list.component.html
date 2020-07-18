@@ -19,9 +19,16 @@
     <small *ngIf="form.controls['arrival'].invalid">Please select Arrival location</small>
 
 
-    <label for="TotalSeats">TotalSeats</label>
+    <label for="totalSeats">Total Seats</label>
+    <select name="totalSeats" formControlName="totalSeats">
+        <option *ngFor="let totalSeats of totalSeatsOption" [(value)]="totalSeats">{{totalSeats}}</option>
+    </select>
+    <small *ngIf="form.controls['totalSeats'].invalid">Please select Total Seats</small>
+
+
+    <!-- <label for="TotalSeats">TotalSeats</label>
     <input type="number" name="TotalSeats" placeholder="TotalSeats *" formControlName="totalSeats" />
-    <small *ngIf="form.controls['totalSeats'].invalid">Require</small>
+    <small *ngIf="form.controls['totalSeats'].invalid">Require</small> -->
 
     <label for="Price">Price</label>
     <input type="number" name="Price" placeholder="Price *" formControlName="price" />

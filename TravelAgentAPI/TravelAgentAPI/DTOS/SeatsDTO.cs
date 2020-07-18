@@ -6,7 +6,7 @@ using TravelAgentAPI.DataModels;
 
 namespace TravelAgentAPI.DTOS
 {
-    public class SeatsDTO : Seat
+    public class SeatsDTO:Seat
     {
         public bool IsBooked {get;set;}
     }

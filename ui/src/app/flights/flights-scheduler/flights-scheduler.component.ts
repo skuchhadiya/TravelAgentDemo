@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CustomerService } from 'src/app/services/customer.service';
 import { IFlightScheduler } from 'src/app/models/Flight';
 import { FlightSchedulerService } from 'src/app/services/flight-scheduler.service';
 import { emptyGuid } from 'src/app/constants/constants';
@@ -13,10 +12,12 @@ import { times } from 'src/app/constants/times';
   styleUrls: ['./flights-scheduler.component.scss']
 })
 export class FlightsSchedulerComponent implements OnInit {
+
   times = times;
   flightId: string;
   flightSchedulers: IFlightScheduler[] = []
   form: FormGroup;
+
   constructor(
     private _route: ActivatedRoute,
     private _flightSchedulerService: FlightSchedulerService) {
@@ -24,7 +25,6 @@ export class FlightsSchedulerComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this._flightSchedulerService.GetFlightSchedulers(this.flightId)
       .subscribe(flightSchedulers => {
         console.log(flightSchedulers);
@@ -39,6 +39,7 @@ export class FlightsSchedulerComponent implements OnInit {
       journeyTime: new FormControl(null, [Validators.required]),
     });
   }
+
   createScheduler() {
     console.log(this.form);
     if (this.form.valid) {

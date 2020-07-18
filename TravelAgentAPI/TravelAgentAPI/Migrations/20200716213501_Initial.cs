@@ -12,9 +12,7 @@ namespace TravelAgentAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Type = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,11 +41,34 @@ namespace TravelAgentAPI.Migrations
                     Arrival = table.Column<string>(nullable: true),
                     Depature = table.Column<string>(nullable: true),
                     TotalSeats = table.Column<int>(nullable: false),
-                    Price = table.Column<double>(nullable: false)
+                    Price = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Flights", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    BookingRef = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    BookedDate = table.Column<DateTime>(nullable: false),
+                    ClientID = table.Column<Guid>(nullable: false),
+                    IsPaymentSuccessful = table.Column<bool>(nullable: false),
+                    TotalAmount = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Clients_ClientID",
+                        column: x => x.ClientID,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,99 +116,66 @@ namespace TravelAgentAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    BookingRef = table.Column<string>(nullable: true),
-                    BookedDate = table.Column<DateTime>(nullable: false),
-                    ClientID = table.Column<Guid>(nullable: false),
-                    OutBookingDate = table.Column<DateTime>(nullable: false),
-                    OutFlightId = table.Column<Guid>(nullable: false),
-                    OutFlightSchedulerId = table.Column<Guid>(nullable: false),
-                    OutSeatId = table.Column<Guid>(nullable: false),
-                    InBookingDate = table.Column<DateTime>(nullable: true),
-                    InSchedulerId = table.Column<Guid>(nullable: true),
-                    InFlightId = table.Column<Guid>(nullable: true),
-                    InSeatId = table.Column<Guid>(nullable: true)
+                    BookingID = table.Column<Guid>(nullable: false),
+                    FlightType = table.Column<int>(nullable: false),
+                    BookingDate = table.Column<DateTime>(nullable: false),
+                    FlightId = table.Column<Guid>(nullable: true),
+                    FlightSchedulerId = table.Column<Guid>(nullable: true),
+                    SeatId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FlightBookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FlightBookings_Clients_ClientID",
-                        column: x => x.ClientID,
-                        principalTable: "Clients",
+                        name: "FK_FlightBookings_Bookings_BookingID",
+                        column: x => x.BookingID,
+                        principalTable: "Bookings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FlightBookings_Flights_InFlightId",
-                        column: x => x.InFlightId,
+                        name: "FK_FlightBookings_Flights_FlightId",
+                        column: x => x.FlightId,
                         principalTable: "Flights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FlightBookings_FlightSchedulers_InSchedulerId",
-                        column: x => x.InSchedulerId,
+                        name: "FK_FlightBookings_FlightSchedulers_FlightSchedulerId",
+                        column: x => x.FlightSchedulerId,
                         principalTable: "FlightSchedulers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FlightBookings_Seats_InSeatId",
-                        column: x => x.InSeatId,
-                        principalTable: "Seats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FlightBookings_Flights_OutFlightId",
-                        column: x => x.OutFlightId,
-                        principalTable: "Flights",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FlightBookings_FlightSchedulers_OutFlightSchedulerId",
-                        column: x => x.OutFlightSchedulerId,
-                        principalTable: "FlightSchedulers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FlightBookings_Seats_OutSeatId",
-                        column: x => x.OutSeatId,
+                        name: "FK_FlightBookings_Seats_SeatId",
+                        column: x => x.SeatId,
                         principalTable: "Seats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_ClientID",
-                table: "FlightBookings",
+                name: "IX_Bookings_ClientID",
+                table: "Bookings",
                 column: "ClientID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_InFlightId",
+                name: "IX_FlightBookings_BookingID",
                 table: "FlightBookings",
-                column: "InFlightId");
+                column: "BookingID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_InSchedulerId",
+                name: "IX_FlightBookings_FlightId",
                 table: "FlightBookings",
-                column: "InSchedulerId");
+                column: "FlightId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_InSeatId",
+                name: "IX_FlightBookings_FlightSchedulerId",
                 table: "FlightBookings",
-                column: "InSeatId");
+                column: "FlightSchedulerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_OutFlightId",
+                name: "IX_FlightBookings_SeatId",
                 table: "FlightBookings",
-                column: "OutFlightId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_OutFlightSchedulerId",
-                table: "FlightBookings",
-                column: "OutFlightSchedulerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FlightBookings_OutSeatId",
-                table: "FlightBookings",
-                column: "OutSeatId");
+                column: "SeatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlightSchedulers_FlightId",
@@ -209,13 +197,16 @@ namespace TravelAgentAPI.Migrations
                 name: "FlightBookings");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "FlightSchedulers");
 
             migrationBuilder.DropTable(
                 name: "Seats");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Flights");

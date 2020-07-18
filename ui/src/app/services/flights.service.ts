@@ -8,6 +8,7 @@ import { IFlight, IFlightDeatils, IFlightScheduler } from '../models/Flight';
 @Injectable({
   providedIn: 'root'
 })
+
 export class FlightsService {
 
   private _rootUrl: string;
@@ -30,6 +31,7 @@ export class FlightsService {
   }
 
   public CreateFlight(flight: IFlight): Observable<IFlight> {
+    console.log(flight);
 
     return this.httpClient.post<IFlight>(this._rootUrl + 'Flight', flight);
 

@@ -19,20 +19,45 @@ namespace TravelAgentAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("TravelAgentAPI.DataModels.Booking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BookingRef")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ClientID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsPaymentSuccessful")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientID");
+
+                    b.ToTable("Bookings");
+                });
+
             modelBuilder.Entity("TravelAgentAPI.DataModels.Client", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -69,8 +94,8 @@ namespace TravelAgentAPI.Migrations
                     b.Property<string>("Depature")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TotalSeats")
                         .HasColumnType("int");
@@ -86,54 +111,33 @@ namespace TravelAgentAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("BookedDate")
+                    b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("BookingRef")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ClientID")
+                    b.Property<Guid>("BookingID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("InBookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("InFlightId")
+                    b.Property<Guid?>("FlightId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("InSchedulerId")
+                    b.Property<Guid?>("FlightSchedulerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("InSeatId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FlightType")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("OutBookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OutFlightId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OutFlightSchedulerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OutSeatId")
+                    b.Property<Guid?>("SeatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientID");
+                    b.HasIndex("BookingID");
 
-                    b.HasIndex("InFlightId");
+                    b.HasIndex("FlightId");
 
-                    b.HasIndex("InSchedulerId");
+                    b.HasIndex("FlightSchedulerId");
 
-                    b.HasIndex("InSeatId");
-
-                    b.HasIndex("OutFlightId");
-
-                    b.HasIndex("OutFlightSchedulerId");
-
-                    b.HasIndex("OutSeatId");
+                    b.HasIndex("SeatId");
 
                     b.ToTable("FlightBookings");
                 });
@@ -182,43 +186,34 @@ namespace TravelAgentAPI.Migrations
                     b.ToTable("Seats");
                 });
 
-            modelBuilder.Entity("TravelAgentAPI.DataModels.FlightBooking", b =>
+            modelBuilder.Entity("TravelAgentAPI.DataModels.Booking", b =>
                 {
                     b.HasOne("TravelAgentAPI.DataModels.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("TravelAgentAPI.DataModels.Flight", "InFlight")
-                        .WithMany()
-                        .HasForeignKey("InFlightId");
-
-                    b.HasOne("TravelAgentAPI.DataModels.FlightScheduler", "InScheduler")
-                        .WithMany()
-                        .HasForeignKey("InSchedulerId");
-
-                    b.HasOne("TravelAgentAPI.DataModels.Seat", "InSeat")
-                        .WithMany()
-                        .HasForeignKey("InSeatId");
-
-                    b.HasOne("TravelAgentAPI.DataModels.Flight", "OutFlight")
-                        .WithMany()
-                        .HasForeignKey("OutFlightId")
+            modelBuilder.Entity("TravelAgentAPI.DataModels.FlightBooking", b =>
+                {
+                    b.HasOne("TravelAgentAPI.DataModels.Booking", null)
+                        .WithMany("FlightBooking")
+                        .HasForeignKey("BookingID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelAgentAPI.DataModels.FlightScheduler", "OutFlightScheduler")
+                    b.HasOne("TravelAgentAPI.DataModels.Flight", "Flight")
                         .WithMany()
-                        .HasForeignKey("OutFlightSchedulerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FlightId");
 
-                    b.HasOne("TravelAgentAPI.DataModels.Seat", "OutSeat")
+                    b.HasOne("TravelAgentAPI.DataModels.FlightScheduler", "FlightScheduler")
                         .WithMany()
-                        .HasForeignKey("OutSeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FlightSchedulerId");
+
+                    b.HasOne("TravelAgentAPI.DataModels.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId");
                 });
 
             modelBuilder.Entity("TravelAgentAPI.DataModels.FlightScheduler", b =>

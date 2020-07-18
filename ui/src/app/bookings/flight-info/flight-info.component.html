@@ -1,0 +1,23 @@
+<div *ngIf="options" class="flight-info-container">
+    <h2> {{isOutBound ? 'Outbound Flights' : 'Inbound Flights'  }}</h2>
+    <div class="flight-info" *ngFor="let option of options">
+        <div class="flight-code">
+            <h5>{{option.code}}</h5>
+            <h5>£{{option.price}}</h5>
+            <h5>{{option.journeyTime}}</h5>
+        </div>
+        <div class="flight-details">
+            <div class="flight-details-depature">
+                <h4>{{option.depature}}</h4>
+                <h4>{{option.departureTime }}</h4>
+            </div>
+            <div class="flight-details-arrival">
+                <h4>{{option.arrival}}</h4>
+                <h4>{{option.arrivalTime }}</h4>
+            </div>
+        </div>
+        <div *ngIf="!form.controls['seletedFlight'].value" class="selction-button">
+            <button type="submit" (click)="onSelect(option)">Select</button>
+        </div>
+    </div>
+</div>

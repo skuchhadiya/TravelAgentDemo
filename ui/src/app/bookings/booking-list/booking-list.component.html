@@ -1,1 +1,67 @@
-<p>booking-list works!</p>
+<form class="search-form-container" [formGroup]="searchform" (ngSubmit)="createSearch()">
+    <div class="radio-container">
+        <input type="radio" id="type" name="type" [value]="clientTypeEnum.OneWay" formControlName="type">
+        <label for="type">OneWay</label>
+        <input type="radio" id="type" name="type" [value]="clientTypeEnum.Return" formControlName="type">
+        <label for="type">Return</label>
+    </div>
+    <div class="selection-container">
+        <div class="select-container">
+            <label for="Depature">Depature</label>
+            <select name="Depature" formControlName="depature" (change)="depatureSelected($event.target.value)">
+                <option *ngFor="let location of depaturelocations" [(value)]="location">{{location}}</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <label for="Arrival">Arrival</label>
+            <select name="Arrival" formControlName="arrival">
+                <option *ngFor="let location of arrivallocations" [(value)]="location">{{location}}</option>
+            </select>
+        </div>
+        <div class="submit-button">
+            <button type="submit" [disabled]="searchform.invalid">Search Flights</button>
+        </div>
+    </div>
+</form>
+
+<form class="bookingform-container" [formGroup]="bookingform" *ngIf="outBoudsFlight" (ngSubmit)="onSubmit()">
+
+    <ng-container class="name-container">
+        <label for=" name">Name</label>
+        <input name="name" placeholder="Name *" formControlName="name" />
+        <small *ngIf="bookingform.controls['name'].invalid">Require</small>
+    </ng-container>
+
+    <div class="flight-selection-container" *ngIf="outBoudsFlight">
+        <app-flight-info formControlName="outBoudFlightInfo" (change)="onSelectFlight($event)" [isOutBound]="true"
+            [flightOptions]="outBoudsFlight">
+        </app-flight-info>
+
+        <div *ngIf="bookingform.controls['outBoudFlightInfo'].value">
+            <label for="depatureSeat">Depature Seat</label>
+            <select name="depatureSeat" formControlName="outBoudFlightSeat">
+                <option *ngFor="let option of outBoundFlightseatsOptions" [(value)]="option.id">{{option.seatNumber}}
+                </option>
+            </select>
+            <small *ngIf="bookingform.controls['outBoudFlightSeat'].invalid">Please select depature seat </small>
+        </div>
+    </div>
+    <div class="flight-selection-container"
+        *ngIf="searchform.controls['type'].value ===clientTypeEnum.Return && inBoudsFlight && inBoudsFlight.length>0">
+        <app-flight-info formControlName="inBoudFlightInfo" (change)="onSelectFlight($event)" [isOutBound]="false"
+            [flightOptions]="inBoudsFlight">
+        </app-flight-info>
+
+        <div *ngIf="bookingform.controls['inBoudFlightInfo'].value">
+            <label for="arrival">Arrival Seat</label>
+            <select name="arrival" formControlName="inBoudFlightSeat">
+                <option *ngFor="let option of outBoundFlightseatsOptions" [(value)]="option.id">{{option.seatNumber}}
+                </option>
+            </select>
+            <small *ngIf="bookingform.controls['inBoudFlightSeat'].invalid">Please select arrival seat </small>
+        </div>
+    </div>
+    <label *ngIf="bookingform.controls['totalAmount'].value">TotalAmout :
+        {{bookingform.controls['totalAmount'].value}}</label>
+    <button type="submit">Submit</button>
+</form>

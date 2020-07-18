@@ -14,8 +14,7 @@ namespace TravelAgentAPI.DataModels
         public string Depature { get; set; }
 
         public int TotalSeats { get; set; }
-        public double Price { get; set; }
-
+        public Decimal Price { get; set; }
 
         public virtual List<FlightScheduler> FlightSchedulers { get; set; }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IFlight } from 'src/app/models/Flight';
 import { FlightsService } from 'src/app/services/flights.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { emptyGuid } from 'src/app/constants/constants';
+import { emptyGuid, totalSeatsOption } from 'src/app/constants/constants';
 import { locations } from 'src/app/constants/locations';
 import { deepClone } from 'src/app/Utility/deep-Clone';
 
@@ -15,6 +15,7 @@ import { deepClone } from 'src/app/Utility/deep-Clone';
 export class FlightsListComponent implements OnInit {
 
   depaturelocations = deepClone(locations);
+  totalSeatsOption = totalSeatsOption;
   arrivallocations = [];
   form: FormGroup;
   flights: IFlight[] = [];
@@ -65,7 +66,7 @@ export class FlightsListComponent implements OnInit {
       code: form.controls['code'].value,
       depature: form.controls['depature'].value,
       arrival: form.controls['arrival'].value,
-      totalSeats: form.controls['totalSeats'].value,
+      totalSeats: parseInt(form.controls['totalSeats'].value),
       price: form.controls['price'].value,
     };
   }

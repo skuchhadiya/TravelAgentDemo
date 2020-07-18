@@ -19,6 +19,8 @@ namespace TravelAgentAPI.DataModels
 
         public DbSet<FlightBooking> FlightBookings { get; set; }
 
+        public DbSet<Booking> Bookings { get; set; }
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -56,6 +58,11 @@ namespace TravelAgentAPI.DataModels
 
             modelBuilder.Entity<FlightBooking>()
                .ToTable("FlightBookings")
+               .Property(x => x.Id)
+               .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Booking>()
+               .ToTable("Bookings")
                .Property(x => x.Id)
                .ValueGeneratedOnAdd();
         }
