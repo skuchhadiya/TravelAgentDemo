@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgentAPI.DataModels;
@@ -33,7 +34,7 @@ namespace TravelAgentAPI.Managers
                     Seat = await _context.Seats.SingleOrDefaultAsync(x => x.Id == booking.InBoudFlightInfo.SeatId)
                 };
             }
-            else throw new Exception("Seat is allready allocated to someone"); 
+            else throw new DuplicateNameException("Seat is already allocated to some one");
         }
 
         public async Task<List<FlightBookingSearchInfoDTO>> GetFlightBookingInfoAsync(FlightSearchTermsDTO terms)
