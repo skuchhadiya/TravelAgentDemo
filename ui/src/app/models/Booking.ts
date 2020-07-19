@@ -34,9 +34,9 @@ export interface FlightDetailsDTO {
     bookingDate: Date;
     code: string;
     depature: string;
-    depaturetime: string;
+    depatureDateTime: Date;
     arrival: string;
-    arrivalTime: string;
+    arrivalDateTime: Date;
     journeyTime: string;
     seat: string;
     price: number
@@ -46,19 +46,22 @@ export interface FlightDetailsDTO {
 export interface IFlightSearchTerms {
     type: ClientTypesEnum;
     arrival: string;
-    depature: string
+    depature: string;
+    depatureDate: Date;
+    returnDate: Date;
+
 }
 
 export interface IFlightBookingInfoDTO {
     flightId: string;
     flightSchedulerId: string;
     flightType: FlightTypeEnum;
-    code: string
-    arrival: string
-    depature: string
-    departureTime: string
-    arrivalTime: string
-    journeyTime: string
-    price: string
-    seatId: string
+    code: string;
+    arrival: string;
+    depature: string;
+    departureDateTime: Date;
+    arrivalDateTime: Date;
+    journeyTime: string;
+    price: string;
+    seatId: string;
 }

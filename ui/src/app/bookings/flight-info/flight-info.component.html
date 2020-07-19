@@ -9,11 +9,13 @@
         <div class="flight-details">
             <div class="flight-details-depature">
                 <h4>{{option.depature}}</h4>
-                <h4>{{option.departureTime }}</h4>
+                <h4>{{option.departureDateTime | date  }}</h4>
+                <h4>{{option.departureDateTime | date : 'HH:MM' }}</h4>
             </div>
             <div class="flight-details-arrival">
                 <h4>{{option.arrival}}</h4>
-                <h4>{{option.arrivalTime }}</h4>
+                <h4>{{option.arrivalDateTime | date  }}</h4>
+                <h4>{{option.arrivalDateTime | date : 'HH:MM' }}</h4>
             </div>
         </div>
         <div *ngIf="!form.controls['seletedFlight'].value" class="selction-button">

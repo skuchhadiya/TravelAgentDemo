@@ -1,9 +1,16 @@
 <form class="search-form-container" [formGroup]="searchform" (ngSubmit)="createSearch()">
     <div class="radio-container">
-        <input type="radio" id="type" name="type" [value]="clientTypeEnum.OneWay" formControlName="type">
+        <input type="radio" id="type" [value]="clientTypeEnum.OneWay" (change)="oneWaySelected()"
+            formControlName="type">
         <label for="type">OneWay</label>
-        <input type="radio" id="type" name="type" [value]="clientTypeEnum.Return" formControlName="type">
+        <input type="radio" id="type" [value]="clientTypeEnum.Return" (change)="returnSelected()"
+            formControlName="type">
         <label for="type">Return</label>
+        <div>
+            <input *ngIf="searchform.controls['type'].value ===clientTypeEnum.Return" type="date" name="return"
+                [min]="minDate" formControlName="returnDate">
+        </div>
+
     </div>
     <div class="selection-container">
         <div class="select-container">
@@ -11,18 +18,31 @@
             <select name="Depature" formControlName="depature" (change)="depatureSelected($event.target.value)">
                 <option *ngFor="let location of depaturelocations" [(value)]="location">{{location}}</option>
             </select>
+            <input type="date" name="depature-time" [min]="minDate" formControlName="depatureDate">
+
         </div>
+
         <div class="select-container">
             <label for="Arrival">Arrival</label>
             <select name="Arrival" formControlName="arrival">
                 <option *ngFor="let location of arrivallocations" [(value)]="location">{{location}}</option>
             </select>
+
         </div>
+
+
         <div class="submit-button">
             <button type="submit" [disabled]="searchform.invalid">Search Flights</button>
         </div>
     </div>
 </form>
+
+<div *ngIf="errorMessage && !successMessage" class="error">
+    {{errorMessage}}
+</div>
+<div class="success" *ngIf="successMessage && !errorMessage">
+    {{successMessage}}
+</div>
 
 <form class="bookingform-container" [formGroup]="bookingform" *ngIf="outBoudsFlight" (ngSubmit)="onSubmit()">
 
@@ -66,9 +86,4 @@
     <div class="submit-button">
         <button type="submit">Submit</button>
     </div>
-
 </form>
-<div class="success" *ngIf="bookingDeatils">
-    <p>Thanks {{bookingDeatils.name}} for booking with travel Agent, Your booking has been confirmend</p>
-    <p>Booking Ref : {{bookingDeatils.bookingRef}}</p>
-</div>

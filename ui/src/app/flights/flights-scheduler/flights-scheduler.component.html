@@ -3,21 +3,17 @@
 <form [formGroup]="form" (ngSubmit)="createScheduler()">
 
     <label for="departureTime">Departure Time</label>
-    <select name="departureTime" formControlName="departureTime">
-        <option *ngFor="let time of times" [(value)]="time">{{time}}</option>
-    </select>
-    <small *ngIf="form.controls['departureTime'].invalid">Please select Departure Time</small>
+    <input type="datetime-local" name="departureTime" [min]="minDate" formControlName="departureDateTime">
+    <small *ngIf="form.controls['departureDateTime'].invalid">Please select Departure DateTime</small>
 
     <label for="arrivalTime">Arrival Time</label>
-    <select name="arrivalTime" formControlName="arrivalTime">
-        <option *ngFor="let time of times" [(value)]="time">{{time}}</option>
-    </select>
-    <small *ngIf="form.controls['arrivalTime'].invalid">Please select Arrival Time</small>
-
-    <!-- this can be done autometic input by calculate diffrence between Departure and Arrival but out of scope work -->
-    <label for="JourneyTime">Total Journey Time</label>
-    <input name="journeyTime" placeholder="journeyTime *" formControlName="journeyTime" />
-    <small *ngIf="form.controls['journeyTime'].invalid">Required</small>
+    <input type="datetime-local" name="arrivalTime" [min]="minDate" formControlName="arrivalDateTime">
+    <small *ngIf="form.controls['arrivalDateTime'].invalid">Please select Arrival Date Time</small>
+    <div>
+        <label *ngIf="form.controls['departureDateTime'].value && form.controls['arrivalDateTime'].value">Total Journey
+            Time
+            : {{journeyTime}}</label>
+    </div>
 
     <button type="submit" [disabled]="form.invalid">Add Flight Schedule</button>
 
@@ -27,15 +23,19 @@
 <table spacing="0">
     <thead>
         <tr>
+            <th>Departure Date</th>
             <th>Departure Time</th>
+            <th>Arrival Date</th>
             <th>Arrival Time</th>
             <th>Total Journey Time</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let schedule of flightSchedulers">
-            <td>{{schedule.departureTime}}</td>
-            <td>{{schedule.arrivalTime}}</td>
+            <td>{{schedule.departureDateTime | date }}</td>
+            <td>{{schedule.departureDateTime | date: 'HH:MM'}}</td>
+            <td>{{schedule.arrivalDateTime | date}}</td>
+            <td>{{schedule.arrivalDateTime | date : 'HH:MM'}}</td>
             <td>{{schedule.journeyTime}}</td>
         </tr>
     </tbody>

@@ -16,7 +16,9 @@ import { FlightTypeEnum } from 'src/app/enums/FlightTypeEnum';
 })
 
 export class BookingComponent implements OnInit {
-
+  errorMessage: string;
+  successMessage: string;
+  minDate = new Date();
   clientTypeEnum = ClientTypesEnum;
   searchform: FormGroup;
   bookingform: FormGroup;
@@ -37,7 +39,9 @@ export class BookingComponent implements OnInit {
     this.searchform = new FormGroup({
       type: new FormControl(ClientTypesEnum.OneWay, [Validators.required]),
       depature: new FormControl(null, [Validators.required]),
-      arrival: new FormControl({ value: null, disabled: true }, [Validators.required])
+      depatureDate: new FormControl(null, [Validators.required]),
+      arrival: new FormControl({ value: null, disabled: true }, [Validators.required]),
+      returnDate: new FormControl(null),
     })
 
     this.bookingform = new FormGroup({
@@ -50,10 +54,15 @@ export class BookingComponent implements OnInit {
     })
   }
 
+  returnSelected() {
+    this.searchform.controls['returnDate'].setValidators([Validators.required]);
+  }
+
   createSearch() {
-
+    this.errorMessage = null;
+    this.successMessage = null
     this.bookingform.reset();
-
+    console.log(this.searchform.value);
     if (this.searchform.valid) {
 
       const search = this._build_IFlightSearchTerms_Instance(this.searchform);
@@ -64,11 +73,16 @@ export class BookingComponent implements OnInit {
 
       this._bookinService.GetFlightBookingInfo(search)
         .subscribe(data => {
-
+          if (data && data.length == 0) {
+            this.errorMessage = 'Flights not found';
+          }
           this.outBoudsFlight = data.filter(x => x.flightType === FlightTypeEnum.OutBound);
           this.inBoudsFlight = data.filter(x => x.flightType === FlightTypeEnum.InBound);
 
-        })
+        },
+          error => {
+            this.errorMessage = 'Error while searching for available flights for given search';
+          })
     }
   }
 
@@ -83,30 +97,48 @@ export class BookingComponent implements OnInit {
   }
 
   onSelectFlight(flight: IFlightBookingInfoDTO) {
-
+    this.errorMessage = null;
     const amount = parseFloat(this.bookingform.get('totalAmount').value ? this.bookingform.get('totalAmount').value : '0');
     const newValue = amount + flight.price;
     this.bookingform.get('totalAmount').setValue(newValue);
 
     this._bookinService.GetFlightSeatsSelection(flight.flightId, flight.flightSchedulerId)
       .subscribe(seats => {
+        if (!seats || seats && seats.length == 0) {
+          this.errorMessage = 'All Seats for flight ' + flight.code + ' is allocated ';
+        }
         if (flight.flightType === FlightTypeEnum.OutBound)
           this.outBoundFlightseatsOptions = seats;
         else (flight.flightType === FlightTypeEnum.InBound)
         this.inBoundFlightseatsOptions = seats;
-      });
+      },
+        error => {
+          this.errorMessage = 'Unable to find available seats for flight' + flight.code;
+        }
+      );
 
   }
 
-  onSubmit() {
+  oneWaySelected() {
+    this.searchform.controls['returnDate'].setValidators([]);
+    this.searchform.controls['returnDate'].reset();
+  }
 
+  onSubmit() {
+    this.errorMessage = null;
+    this.successMessage = null
     if (this.bookingform.valid) {
       const value = this._build_IBookingDTO_Instance(this.bookingform);
       this._bookinService.CreateBooking(value)
-        .subscribe(data => {
-          console.log(data);
-          this.bookingDeatils = data;
-        })
+        .subscribe(newBookingDetils => {
+          if (newBookingDetils) this.bookingform.reset();
+          this.successMessage = 'Thanks ' + newBookingDetils.name + ' for booking with travel Agent, Your booking has been confirmend.' +
+            'Booking Ref: ' + newBookingDetils.bookingRef;
+          this.bookingDeatils = newBookingDetils;
+        },
+          error => {
+            this.errorMessage = 'Something went worng';
+          })
     }
 
   }
@@ -117,7 +149,9 @@ export class BookingComponent implements OnInit {
     return {
       type: form.controls['type'].value,
       depature: form.controls['depature'].value,
-      arrival: form.controls['arrival'].value
+      arrival: form.controls['arrival'].value,
+      depatureDate: form.controls['depatureDate'].value,
+      returnDate: form.controls['returnDate'].value,
     }
 
   }

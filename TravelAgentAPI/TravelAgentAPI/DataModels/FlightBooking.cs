@@ -12,7 +12,6 @@ namespace TravelAgentAPI.DataModels
         [ForeignKey("Booking")]
         public Guid BookingID { get; set; }
         public FlightType FlightType { get; set; }
-        public DateTime BookingDate { get; set; }
         public virtual Flight Flight { get; set; }
         public virtual FlightScheduler FlightScheduler { get; set; }
         public virtual Seat Seat { get; set; }

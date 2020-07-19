@@ -14,8 +14,8 @@ namespace TravelAgentAPI.DTOS
         public string Code { get; set; }
         public string Arrival { get; set; }
         public string Depature { get; set; }
-        public string DepartureTime { get; set; }
-        public string ArrivalTime { get; set; }
+        public DateTime DepartureDateTime { get; set; }
+        public DateTime ArrivalDateTime { get; set; }
         public string JourneyTime { get; set; }
         public decimal Price { get; set; }
         public Guid? SeatId { get; set; }

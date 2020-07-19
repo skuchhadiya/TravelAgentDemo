@@ -12,7 +12,7 @@ namespace TravelAgentAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,9 +37,9 @@ namespace TravelAgentAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(nullable: true),
-                    Arrival = table.Column<string>(nullable: true),
-                    Depature = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: false),
+                    Arrival = table.Column<string>(nullable:false),
+                    Depature = table.Column<string>(nullable: false),
                     TotalSeats = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false)
                 },
@@ -48,23 +48,12 @@ namespace TravelAgentAPI.Migrations
                     table.PrimaryKey("PK_Flights", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-              table: "Flights",
-              columns: new[] {"Id", "Code", "Arrival", "Depature", "TotalSeats", "Price" },
-              values: new object[] { Guid.NewGuid(), "BA452", "London(Any)", "Manchester(MAN)", 152, 350 });
-
-            migrationBuilder.InsertData(
-             table: "Flights",
-             columns: new[] { "Id", "Code", "Arrival", "Depature", "TotalSeats", "Price" },
-             values: new object[] { Guid.NewGuid(), "BA451", "Manchester(MAN)", "London(Any)", 152, 350 });
-
-
             migrationBuilder.CreateTable(
                 name: "Bookings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    BookingRef = table.Column<string>(nullable: true),
+                    BookingRef = table.Column<string>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     BookedDate = table.Column<DateTime>(nullable: false),
                     ClientID = table.Column<Guid>(nullable: false),
@@ -88,8 +77,8 @@ namespace TravelAgentAPI.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     FlightId = table.Column<Guid>(nullable: false),
-                    DepartureTime = table.Column<string>(nullable: true),
-                    ArrivalTime = table.Column<string>(nullable: true),
+                    DepartureDateTime = table.Column<DateTime>(nullable: false),
+                    ArrivalDateTime = table.Column<DateTime>(nullable: false),
                     JourneyTime = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -109,7 +98,7 @@ namespace TravelAgentAPI.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     FlightId = table.Column<Guid>(nullable: false),
-                    SeatNumber = table.Column<string>(nullable: true)
+                    SeatNumber = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,10 +118,9 @@ namespace TravelAgentAPI.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     BookingID = table.Column<Guid>(nullable: false),
                     FlightType = table.Column<int>(nullable: false),
-                    BookingDate = table.Column<DateTime>(nullable: false),
-                    FlightId = table.Column<Guid>(nullable: true),
-                    FlightSchedulerId = table.Column<Guid>(nullable: true),
-                    SeatId = table.Column<Guid>(nullable: true)
+                    FlightId = table.Column<Guid>(nullable: false),
+                    FlightSchedulerId = table.Column<Guid>(nullable: false),
+                    SeatId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {

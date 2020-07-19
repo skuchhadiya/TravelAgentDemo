@@ -11,9 +11,9 @@ namespace TravelAgentAPI.DTOS
         public DateTime BookingDate { get; set; }
         public string Code { get; set; }
         public string Depature { get; set; }
-        public string DepatureTime { get; set; }
+        public DateTime DepatureDateTime { get; set; }
         public string Arrival { get; set; }
-        public string ArrivalTime { get; set; }
+        public DateTime ArrivalDateTime { get; set; }
         public string JourneyTime { get; set; }
         public string  Seat { get; set; }
         public Decimal Price { get; set; }

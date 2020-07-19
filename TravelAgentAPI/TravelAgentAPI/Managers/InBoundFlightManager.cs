@@ -11,21 +11,29 @@ namespace TravelAgentAPI.Managers
 {
     public class InBoundFlightManager : IFlightManager
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public InBoundFlightManager(ApplicationDbContext context)
         {
             this._context = context;
         }
         public async  Task<FlightBooking> CreateAsync(BookingDTO booking)
         {
+           var hasSeatBooked = await _context.FlightBookings
+                .AnyAsync(x =>  x.Seat.Id== booking.InBoudFlightInfo.SeatId 
+                && x.FlightScheduler.DepartureDateTime == booking.InBoudFlightInfo.DepartureDateTime );
+
+           if (!hasSeatBooked)
+            {
                 return new FlightBooking()
                 {
                     FlightType = FlightType.InBound,
-                    BookingDate = DateTime.Now,
+          
                     Flight = await _context.Flights.SingleOrDefaultAsync(x => x.Id == booking.InBoudFlightInfo.FlightId),
                     FlightScheduler = await _context.FlightSchedulers.SingleOrDefaultAsync(x => x.Id == booking.InBoudFlightInfo.FlightSchedulerId),
                     Seat = await _context.Seats.SingleOrDefaultAsync(x => x.Id == booking.InBoudFlightInfo.SeatId)
                 };
+            }
+            else throw new Exception("Seat is allready allocated to someone"); 
         }
 
         public async Task<List<FlightBookingSearchInfoDTO>> GetFlightBookingInfoAsync(FlightSearchTermsDTO terms)
@@ -40,21 +48,25 @@ namespace TravelAgentAPI.Managers
                 List<FlightBookingSearchInfoDTO> list = new List<FlightBookingSearchInfoDTO>();
                 foreach (var scheduler in x.FlightSchedulers)
                 {
-                    var info = new FlightBookingSearchInfoDTO()
+                    if(terms.ReturnDate >  scheduler.ArrivalDateTime && terms.DepatureDate < scheduler.DepartureDateTime)
                     {
-                        FlightId = x.Id,
-                        FlightSchedulerId = scheduler.Id,
-                        FlightType = FlightType.InBound,
-                        Code = x.Code,
-                        Arrival = x.Arrival,
-                        Depature = x.Depature,
-                        DepartureTime = scheduler.DepartureTime,
-                        ArrivalTime = scheduler.ArrivalTime,
-                        JourneyTime = scheduler.JourneyTime,
-                        Price = x.Price,
-                        SeatId = null
-                    };
-                    list.Add(info);
+                        var info = new FlightBookingSearchInfoDTO()
+                        {
+                            FlightId = x.Id,
+                            FlightSchedulerId = scheduler.Id,
+                            FlightType = FlightType.InBound,
+                            Code = x.Code,
+                            Arrival = x.Arrival,
+                            Depature = x.Depature,
+                            DepartureDateTime = scheduler.DepartureDateTime,
+                            ArrivalDateTime = scheduler.ArrivalDateTime,
+                            JourneyTime = scheduler.JourneyTime,
+                            Price = x.Price,
+                            SeatId = null
+                        };
+                        list.Add(info);
+                    }
+                    
 
                 };
                 return list;
@@ -67,12 +79,11 @@ namespace TravelAgentAPI.Managers
             if (inBoundFlight == null) return null;
             return new FlightDetailsDTO
             {
-                BookingDate = inBoundFlight.BookingDate,
                 Code = inBoundFlight.Flight.Code,
                 Depature = inBoundFlight.Flight.Depature,
-                DepatureTime = inBoundFlight.FlightScheduler.DepartureTime,
+                DepatureDateTime = inBoundFlight.FlightScheduler.DepartureDateTime,
                 Arrival = inBoundFlight.Flight.Arrival,
-                ArrivalTime = inBoundFlight.FlightScheduler.ArrivalTime,
+                ArrivalDateTime = inBoundFlight.FlightScheduler.ArrivalDateTime,
                 JourneyTime = inBoundFlight.FlightScheduler.JourneyTime,
                 Seat = inBoundFlight.Seat.SeatNumber,
                 Price = inBoundFlight.Flight.Price

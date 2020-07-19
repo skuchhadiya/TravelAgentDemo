@@ -12,17 +12,26 @@
                     width: 50px;
                 }
                 @include flexCenter(row);
+                div {
+                    margin-left: 25px;
+                }
             }
             .selection-container{
             padding: 15px;
             @include flexCenter(row);
             .select-container{
-            height: 50px;
                 padding: 15px;
-                @include flexCenter(column);
+                margin-top: 10px;
+                @include flexCenter(row);
+                select {
+                    height: 25px;
+                }
+                input {
+                    margin-left: 10px;
+                }
             }
             .submit-button {
-                padding-top: 15px;
+                padding-top: 10px;
             }      
         }
     }
@@ -42,5 +51,9 @@
         color: green;
 
     }
+    .error{
+        color:red;
+
+    }
     
-}
+} 

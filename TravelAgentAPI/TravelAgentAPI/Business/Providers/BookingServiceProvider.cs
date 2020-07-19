@@ -28,7 +28,7 @@ namespace TravelAgentAPI.Business.Providers
             {
                 BookingRef = (DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + booking.Name),
                 Type = booking.InBoudFlightInfo != null ? ClientTypes.Return : ClientTypes.OneWay,
-                BookedDate = DateTime.Now,
+                BookedDate = DateTime.Now.Date,
                 Client = new Client { Name = booking.Name },
                 FlightBooking = await _flightBookingManager.CreateAsync(booking),
                 IsPaymentSuccessful = true,
@@ -58,11 +58,11 @@ namespace TravelAgentAPI.Business.Providers
             var result = totalSeats.Select(x => new SeatsDTO()
             {
                 Id = x.Id,
-                FlightId =x.FlightId,
+                FlightId = x.FlightId,
                 SeatNumber = x.SeatNumber,
                 IsBooked = allocatedSeats.Any(y => y.Id == x.Id)
 
-            }).ToList();
+            }).Where(x => x.IsBooked == false).ToList();
             return result;
         }
 

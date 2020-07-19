@@ -62,8 +62,8 @@ namespace TravelAgentAPI.Business.Providers
             var addedFlightScheduler = _context.FlightSchedulers.Add(new FlightScheduler()
             {
                 FlightId = flightScheduler.FlightId,
-                DepartureTime = flightScheduler.DepartureTime,
-                ArrivalTime = flightScheduler.ArrivalTime,
+                DepartureDateTime = flightScheduler.DepartureDateTime,
+                ArrivalDateTime = flightScheduler.ArrivalDateTime,
                 JourneyTime = flightScheduler.JourneyTime,
             });
             await _context.SaveChangesAsync();
@@ -94,8 +94,8 @@ namespace TravelAgentAPI.Business.Providers
             {
                 Id = flightScheduler.Id,
                 FlightId = flightScheduler.FlightId,
-                DepartureTime = flightScheduler.DepartureTime,
-                ArrivalTime = flightScheduler.ArrivalTime,
+                DepartureDateTime = flightScheduler.DepartureDateTime,
+                ArrivalDateTime = flightScheduler.ArrivalDateTime,
                 JourneyTime = flightScheduler.JourneyTime,
             };
         }

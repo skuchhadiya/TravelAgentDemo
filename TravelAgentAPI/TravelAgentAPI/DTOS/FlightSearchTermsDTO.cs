@@ -11,5 +11,7 @@ namespace TravelAgentAPI.DTOS
         public ClientTypes Type { get; set; }
         public string Arrival { get; set; }
         public string Depature { get; set; }
+        public DateTime DepatureDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
     }
 }

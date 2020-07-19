@@ -10,8 +10,8 @@ using TravelAgentAPI.DataModels;
 namespace TravelAgentAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200716213501_Initial")]
-    partial class Initial
+    [Migration("20200718221136_InsertDefaultData")]
+    partial class InsertDefaultData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -113,9 +113,6 @@ namespace TravelAgentAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("BookingDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("BookingID")
                         .HasColumnType("uniqueidentifier");
 
@@ -150,11 +147,11 @@ namespace TravelAgentAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ArrivalTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ArrivalDateTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("DepartureTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DepartureDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("FlightId")
                         .HasColumnType("uniqueidentifier");

@@ -10,8 +10,9 @@ namespace TravelAgentAPI.DataModels
     {
         [ForeignKey ("Flight")]
         public Guid FlightId { get; set; }
-        public string DepartureTime { get; set; }
-        public string ArrivalTime { get; set; }
+        public virtual Flight Flight { get; }
+        public DateTime DepartureDateTime { get; set; }
+        public DateTime ArrivalDateTime { get; set; }
         public string JourneyTime { get; set; }
     }
 }

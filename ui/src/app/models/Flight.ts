@@ -17,8 +17,8 @@ export interface IFlightDeatils extends IFlight {
 export interface IFlightScheduler {
     id: String;
     flightId: string;
-    departureTime: string;
-    arrivalTime: string;
+    departureDateTime: Date;
+    arrivalDateTime: Date;
     journeyTime: string;
 }
 
