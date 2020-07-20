@@ -5,7 +5,6 @@ import { IFlightScheduler } from 'src/app/models/Flight';
 import { FlightSchedulerService } from 'src/app/services/flight-scheduler.service';
 import { emptyGuid } from 'src/app/constants/constants';
 
-
 function diff_hours(dt2, dt1): any {
   var diff = (dt2.getTime() - dt1.getTime()) / 1000;
   diff /= (60 * 60);
@@ -18,6 +17,7 @@ function diff_hours(dt2, dt1): any {
   styleUrls: ['./flights-scheduler.component.scss']
 })
 export class FlightsSchedulerComponent implements OnInit {
+
   minDate = new Date();
   flightId: string;
   flightSchedulers: IFlightScheduler[] = []
@@ -45,7 +45,6 @@ export class FlightsSchedulerComponent implements OnInit {
 
     this._flightSchedulerService.GetFlightSchedulers(this.flightId)
       .subscribe(flightSchedulers => {
-        console.log(flightSchedulers);
         this.flightSchedulers = flightSchedulers;
       });
 
@@ -64,7 +63,6 @@ export class FlightsSchedulerComponent implements OnInit {
       const newflightScheduler = this._bulid_IFlightScheduler_Instance(this.form);
       this._flightSchedulerService.CreateFlightScheduler(newflightScheduler)
         .subscribe(flightScheduler => {
-
           this.flightSchedulers.push(flightScheduler);
         })
     }
@@ -75,13 +73,17 @@ export class FlightsSchedulerComponent implements OnInit {
     const departureDateTime = new Date(this.form.controls['departureDateTime'].value);
     const arrivalDateTime = new Date(this.form.controls['arrivalDateTime'].value);
     const diff = this.timeDiffCalc(arrivalDateTime, departureDateTime);
+
     return {
+
       id: form.controls['id'].value,
       flightId: form.controls['flightId'].value,
       departureDateTime: form.controls['departureDateTime'].value,
       arrivalDateTime: form.controls['arrivalDateTime'].value,
       journeyTime: diff
+
     };
+
 
   }
 
@@ -91,17 +93,13 @@ export class FlightsSchedulerComponent implements OnInit {
     // calculate days
     const days = Math.floor(diffInMilliSeconds / 86400);
     diffInMilliSeconds -= days * 86400;
-    console.log('calculated days', days);
-
     // calculate hours
     const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
     diffInMilliSeconds -= hours * 3600;
-    console.log('calculated hours', hours);
 
     // calculate minutes
     const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
     diffInMilliSeconds -= minutes * 60;
-    console.log('minutes', minutes);
 
     let difference = '';
     if (days > 0) {

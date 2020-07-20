@@ -26,7 +26,6 @@ export class FlightsListComponent implements OnInit {
 
     this._flightService.GetFlights().subscribe(flights => {
       this.flights = flights
-      console.log(this.flights);
     });
 
     this.form = new FormGroup({

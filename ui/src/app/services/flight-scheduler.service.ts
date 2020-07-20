@@ -10,21 +10,21 @@ import { Observable } from 'rxjs';
 })
 export class FlightSchedulerService {
 
-  private _rootUrl: string;
+  rootUrl: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,) {
     const environmentVariable = <IEnvironment>environment;
-    this._rootUrl = environmentVariable.apiEndPoint
+    this.rootUrl = environmentVariable.apiEndPoint
   }
   public GetFlightSchedulers(flightId: string): Observable<IFlightScheduler[]> {
 
-    return this.httpClient.get<IFlightScheduler[]>(this._rootUrl + 'Scheduler/' + flightId);
+    return this.httpClient.get<IFlightScheduler[]>(this.rootUrl + 'Scheduler/' + flightId);
 
   }
 
   public CreateFlightScheduler(flightScheduler: IFlightScheduler): Observable<IFlightScheduler> {
 
-    return this.httpClient.post<IFlightScheduler>(this._rootUrl + 'Scheduler', flightScheduler);
+    return this.httpClient.post<IFlightScheduler>(this.rootUrl + 'Scheduler', flightScheduler);
 
   }
 }

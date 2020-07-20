@@ -41,15 +41,17 @@ export class FlightInfoComponent implements OnInit, OnChanges, ControlValueAcces
     }
   }
 
-
   writeValue(obj: IFlightBookingInfoDTO): void {
     this.form.controls['seletedFlight'].setValue(obj)
   }
+
   registerOnChange(fn: any): void {
     this._onChange = fn;
   }
+
   registerOnTouched(fn: any): void {
   }
+
   setDisabledState?(isDisabled: boolean): void {
   }
 

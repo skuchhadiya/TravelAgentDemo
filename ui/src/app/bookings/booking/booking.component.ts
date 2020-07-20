@@ -62,7 +62,6 @@ export class BookingComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null
     this.bookingform.reset();
-    console.log(this.searchform.value);
     if (this.searchform.valid) {
 
       const search = this._build_IFlightSearchTerms_Instance(this.searchform);

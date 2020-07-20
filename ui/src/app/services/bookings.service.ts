@@ -10,27 +10,27 @@ import { Observable } from 'rxjs';
 })
 export class BookingsService {
 
-  private _rootUrl: string;
+  rootUrl: string;
 
   constructor(private httpClient: HttpClient) {
     const environmentVariable = <IEnvironment>environment;
-    this._rootUrl = environmentVariable.apiEndPoint
+    this.rootUrl = environmentVariable.apiEndPoint
   }
 
   public GetFlightBookingInfo(terms: IFlightSearchTerms): Observable<IFlightBookingInfoDTO[]> {
 
-    return this.httpClient.post<IFlightBookingInfoDTO[]>(this._rootUrl + 'Booking/FlightBookingInfo', terms);
+    return this.httpClient.post<IFlightBookingInfoDTO[]>(this.rootUrl + 'Booking/FlightBookingInfo', terms);
   }
 
   public CreateBooking(iBookingDTO: IBookingDTO): Observable<FlightBookingDetailsDTO> {
 
-    return this.httpClient.post<FlightBookingDetailsDTO>(this._rootUrl + 'Booking', iBookingDTO);
+    return this.httpClient.post<FlightBookingDetailsDTO>(this.rootUrl + 'Booking', iBookingDTO);
 
   }
 
   public GetFlightSeatsSelection(flightId: string, flightSchedulerID): Observable<ISeatDTO[]> {
 
-    return this.httpClient.get<ISeatDTO[]>(this._rootUrl + 'Booking/Seats/' + flightId + '/' + flightSchedulerID);
+    return this.httpClient.get<ISeatDTO[]>(this.rootUrl + 'Booking/Seats/' + flightId + '/' + flightSchedulerID);
 
   }
 }
